@@ -1,0 +1,29 @@
+id,customer_id,customer_question
+Q01,,"What is the current APY on the High-Yield Savings account if I deposit $12,000?"
+Q02,,What's the APR on a Personal Loan for someone with a 760 credit score?
+Q03,,What's the intro APR on the Cash Back Credit Card?
+Q04,CUST003,What APR would I get on a Personal Loan?
+Q05,CUST005,What rate could I get on an Auto Loan?
+Q06,CUST004,What APR would I qualify for on a Personal Line of Credit?
+Q07,,What rate does the Personal Loan carry for good credit?
+Q08,,What is the APY on the Everyday Savings account for a $500 balance?
+Q09,,"What's the annual return on a 12-Month CD with $15,000?"
+Q10,,What's the rate on the 30-Year Fixed Mortgage for excellent credit?
+Q11,,"What APY does the High-Yield Savings offer for balances over $10,000?"
+Q12,,I heard the High-Yield Savings rate just changed. What is it now for large balances?
+Q13,,What is the rate on your Money Market account?
+Q14,,Do you offer a jumbo mortgage and what's the rate?
+Q15,CUST005,Can I get a 15-Year Fixed Mortgage and what would my rate be?
+Q16,,What's the CD rate for a $500 deposit for just 3 months?
+Q17,CUST005,What's the current rate on my loan?
+Q18,CUST008,What are the fees on my card?
+Q19,,What are the rates and fees on a Personal Loan for a 700 credit score?
+Q20,,What's the standard APR and annual fee on the Rewards Credit Card?
+Q21,,How do I open a savings account?
+Q22,,What documents do I need to apply for a mortgage?
+Q23,CUST001,What APY am I currently earning on my Everyday Savings?
+Q24,CUST004,What's the APR on my Auto Loan?
+Q25,CUST007,Can you confirm the rate on my mortgage?
+Q26,CUST001,My High-Yield Savings is only showing 0.30% APY. Isn't the current rate higher?
+Q27,CUST010,What's the interest rate on my Personal Loan?
+Q28,CUST005,What's the APR on my Cash Back Credit Card?

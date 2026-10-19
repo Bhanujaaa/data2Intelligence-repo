@@ -1,0 +1,27 @@
+rule_id,product_id,tier_condition,rate,fee,fee_type,effective_date
+PR001,SAV001,balance < 5000,0.50%,$0,none,2026-08-21
+PR002,SAV001,balance >= 5000,0.90%,$0,none,2026-08-21
+PR003,SAV002,balance < 10000,3.80%,$0,none,2026-08-21
+PR004,SAV002,balance >= 10000,4.20%,$0,none,2026-08-21
+PR004B,SAV002,balance >= 10000,4.50%,$0,none,2026-07-20
+PR005,CD001,balance < 10000,4.50%,$0,none,2026-08-21
+PR006,CD001,balance >= 10000,4.85%,$0,none,2026-08-21
+PR007,LOAN001,credit_score >= 740,6.99%,$0,origination,2026-08-21
+PR008,LOAN001,credit_score 580-739,14.99%,$50,origination,2026-08-21
+PR009,LOAN001,credit_score < 580,29.99%,$75,origination,2026-08-21
+PR010,LOC001,credit_score >= 740,9.50%,$0,annual,2026-08-21
+PR011,LOC001,credit_score 580-739,18.00%,$25,annual,2026-08-21
+PR012,LOC001,credit_score < 580,27.00%,$50,annual,2026-08-21
+PR013,AUTO001,credit_score >= 740,5.25%,$0,none,2026-08-21
+PR014,AUTO001,credit_score 580-739,9.99%,$0,none,2026-08-21
+PR015,AUTO001,credit_score < 580,14.75%,$0,none,2026-08-21
+PR016,CARD001,intro: first 15 billing cycles,0.00%,$95,annual,2026-08-21
+PR017,CARD001,standard,22.99%,$95,annual,2026-08-21
+PR018,CARD002,intro: first 12 billing cycles,0.00%,$0,annual,2026-08-21
+PR019,CARD002,standard,20.49%,$0,annual,2026-08-21
+PR020,MTG001,credit_score >= 740,5.75%,$0,none,2026-08-21
+PR021,MTG001,credit_score 580-739,6.50%,$0,none,2026-08-21
+PR022,MTG001,credit_score < 580,7.25%,$0,none,2026-08-21
+PR023,MTG002,credit_score >= 740,5.50%,$0,none,2026-08-21
+PR024,MTG002,credit_score 580-739,6.25%,$0,none,2026-08-21
+PR025,MTG002,credit_score < 580,7.00%,$0,none,2026-08-21

@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Data2Intelligence on AWS - rate-verification gateway with trust signals.
+  Free-tier friendly: one Lambda (+ function URL), DynamoDB audit table,
+  Groq key in SSM Parameter Store. No Amazon Bedrock, no API Gateway.
+
+Parameters:
+  GroqKeyParam:
+    Type: String
+    Default: /data2intelligence/groq-api-key
+    Description: SSM Parameter Store name (SecureString) holding the Groq API key.
+  GroqModel:
+    Type: String
+    Default: openai/gpt-oss-20b
+
+Resources:
+  # Audit trail: one item per claim. Provisioned 5/5 stays inside the
+  # DynamoDB free tier (25 RCU / 25 WCU / 25 GB per Region).
+  AuditTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PROVISIONED
+      ProvisionedThroughput: { ReadCapacityUnits: 5, WriteCapacityUnits: 5 }
+      AttributeDefinitions:
+        - { AttributeName: audit_id, AttributeType: S }
+      KeySchema:
+        - { AttributeName: audit_id, KeyType: HASH }
+      SSESpecification: { SSEEnabled: true }
+
+  GatewayFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: aws/handler.handler
+      Runtime: python3.12
+      MemorySize: 512
+      Timeout: 60
+      Environment:
+        Variables:
+          GROQ_KEY_PARAM: !Ref GroqKeyParam
+          GROQ_MODEL: !Ref GroqModel
+          AUDIT_TABLE: !Ref AuditTable
+          GATEWAY_WRITE_DIR: /tmp/gateway
+          BOT_WRITE_DIR: /tmp/bot
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref AuditTable
+        - Statement:
+            - Effect: Allow
+              Action: ssm:GetParameter
+              Resource: !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${GroqKeyParam}"
+      # HTTPS endpoint included in Lambda pricing. CORS is handled by FastAPI.
+      # AuthType NONE is for the demo only - switch to AWS_IAM or delete the stack afterwards.
+      FunctionUrlConfig:
+        AuthType: NONE
+
+Outputs:
+  ApiUrl:
+    Description: Paste into the UI (ui/index.html?api=<this URL without trailing slash>)
+    Value: !GetAtt GatewayFunctionUrl.FunctionUrl
+  AuditTableName:
+    Value: !Ref AuditTable

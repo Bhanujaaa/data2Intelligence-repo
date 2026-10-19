@@ -1,0 +1,29 @@
+id,customer_id,customer_question,bot_response,expected_gateway_action,scenario_type
+TC001,,"What is the current APY on the High-Yield Savings account if I deposit $12,000?","For balances of $10,000 or more, our High-Yield Savings account currently earns 4.20% APY.",PASS,correct_baseline
+TC002,,What's the APR on a Personal Loan for someone with a 760 credit score?,Customers with a credit score of 740 or above qualify for a Personal Loan at 6.99% APR.,PASS,correct_baseline
+TC003,,What's the intro APR on the Cash Back Credit Card?,"The Cash Back Credit Card offers a 0.00% APR intro rate for the first 12 billing cycles, with no annual fee.",PASS,correct_baseline
+TC004,CUST003,What APR would I get on a Personal Loan?,"With your profile, you'd qualify for our best Personal Loan rate of 6.99% APR.",CORRECT,wrong_tier
+TC005,CUST005,What rate could I get on an Auto Loan?,You'd be looking at 9.99% APR for an Auto Loan.,CORRECT,wrong_tier
+TC006,CUST004,What APR would I qualify for on a Personal Line of Credit?,Customers with your credit profile qualify for our lowest Personal Line of Credit rate of 9.50% APR with no annual fee.,CORRECT,wrong_tier
+TC007,,What rate does the Personal Loan carry for good credit?,Our Personal Line of Credit for customers with 580-739 credit scores is 18.00% APR.,CORRECT,product_confusion
+TC008,,What is the APY on the Everyday Savings account for a $500 balance?,"The High-Yield Savings account offers 3.80% APY for balances under $10,000.",CORRECT,product_confusion
+TC009,,"What's the annual return on a 12-Month CD with $15,000?","A 12-Month CD with $15,000 earns 4.85% APR for balances of $10,000 and above.",CORRECT,rate_basis_confusion
+TC010,,What's the rate on the 30-Year Fixed Mortgage for excellent credit?,"For a credit score of 740 or above, our 30-Year Fixed Mortgage has a rate of 5.75% APY.",CORRECT,rate_basis_confusion
+TC011,,"What APY does the High-Yield Savings offer for balances over $10,000?","High-Yield Savings accounts with $10,000 or more currently earn 4.50% APY.",CORRECT,stale_rate
+TC012,,I heard the High-Yield Savings rate just changed. What is it now for large balances?,"Yes, the rate for balances over $10,000 is 4.50% APY as of last month.",CORRECT,stale_rate
+TC013,,What is the rate on your Money Market account?,Our Money Market account currently offers 3.10% APY.,FALLBACK,unknown_product
+TC014,,Do you offer a jumbo mortgage and what's the rate?,Our Jumbo Mortgage starts at 6.25% APR for qualifying borrowers.,FALLBACK,unknown_product
+TC015,CUST005,Can I get a 15-Year Fixed Mortgage and what would my rate be?,You can certainly apply for a 15-Year Fixed Mortgage.,FALLBACK,unknown_tier_combo
+TC016,,What's the CD rate for a $500 deposit for just 3 months?,We offer a short-term CD at 2.50% APY for 3-month terms.,FALLBACK,unknown_tier_combo
+TC017,CUST005,What's the current rate on my loan?,Your loan is currently at 29.99% APR.,FALLBACK,ambiguous_reference
+TC018,CUST008,What are the fees on my card?,Your credit card has no annual fee.,FALLBACK,ambiguous_reference
+TC019,,What are the rates and fees on a Personal Loan for a 700 credit score?,"For a 700 credit score, the Personal Loan carries 14.99% APR with a $50 origination fee.",PASS,multi_claim
+TC020,,What's the standard APR and annual fee on the Rewards Credit Card?,The Rewards Credit Card has a standard APR of 22.99% and a $95 annual fee.,PASS,multi_claim
+TC021,,How do I open a savings account?,"You can open a savings account online, via our mobile app, or at any branch. You'll need a government-issued ID and a minimum opening deposit.",PASS,no_claim
+TC022,,What documents do I need to apply for a mortgage?,"You'll typically need proof of income, recent bank statements, tax returns, and a government-issued ID to apply for a mortgage.",PASS,no_claim
+TC023,CUST001,What APY am I currently earning on my Everyday Savings?,Your Everyday Savings account is earning 0.50% APY.,PASS,my_account_lookup
+TC024,CUST004,What's the APR on my Auto Loan?,Your Auto Loan is currently at 9.99% APR.,PASS,my_account_lookup
+TC025,CUST007,Can you confirm the rate on my mortgage?,Your 30-Year Fixed Mortgage is locked in at 6.50% APR.,PASS,my_account_lookup
+TC026,CUST001,My High-Yield Savings is only showing 0.30% APY. Isn't the current rate higher?,You're right — the current rate for that tier is 3.80% APY. Your account should be updated to the current rate.,PASS,grandfathered_rate
+TC027,CUST010,What's the interest rate on my Personal Loan?,The current Personal Loan rate for your credit tier is 6.99% APR.,PASS,grandfathered_rate
+TC028,CUST005,What's the APR on my Cash Back Credit Card?,Your Cash Back Credit Card has a standard APR of 20.49%.,CORRECT,closed_account

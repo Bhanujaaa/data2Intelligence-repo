@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FirstVault Bank — Smarter Banking</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Tokens ───────────────────────────────────────────────── */
+    :root {
+      --navy:        #0b1f3a;
+      --navy-mid:    #142d52;
+      --navy-light:  #1e3f6e;
+      --gold:        #c9973a;
+      --gold-light:  #e8b554;
+      --surface:     #f8fafc;
+      --card:        #ffffff;
+      --border:      #e2e8f0;
+      --text-1:      #0f172a;
+      --text-2:      #475569;
+      --text-3:      #94a3b8;
+      --green:       #059669;
+      --amber:       #d97706;
+      --red:         #dc2626;
+      --radius-sm:   6px;
+      --radius-md:   12px;
+      --radius-lg:   20px;
+      --shadow-sm:   0 1px 3px rgba(0,0,0,.08);
+      --shadow-md:   0 4px 16px rgba(0,0,0,.10);
+      --shadow-lg:   0 12px 40px rgba(0,0,0,.14);
+    }
+
+    /* ── Header ───────────────────────────────────────────────── */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--navy);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      backdrop-filter: blur(12px);
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 68px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 16px; color: var(--navy);
+    }
+    .logo-name { font-weight: 700; font-size: 18px; color: #fff; letter-spacing: -.3px; }
+    .logo-name span { color: var(--gold-light); }
+    .nav { display: flex; align-items: center; gap: 4px; }
+    .nav a {
+      padding: 7px 14px; border-radius: var(--radius-sm);
+      font-size: 14px; font-weight: 500; color: rgba(255,255,255,.75);
+      transition: color .15s, background .15s;
+    }
+    .nav a:hover { color: #fff; background: rgba(255,255,255,.07); }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-ghost {
+      padding: 8px 18px; border-radius: var(--radius-sm);
+      font-size: 14px; font-weight: 500; color: rgba(255,255,255,.8);
+      border: 1px solid rgba(255,255,255,.2);
+      background: transparent; cursor: pointer;
+      transition: border-color .15s, color .15s;
+    }
+    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,.5); }
+    .btn-primary {
+      padding: 8px 20px; border-radius: var(--radius-sm);
+      font-size: 14px; font-weight: 600;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--navy); border: none; cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+    .btn-primary:hover { opacity: .92; transform: translateY(-1px); }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 55%, #1a3a6b 100%);
+      padding: 96px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 75% 50%, rgba(201,151,58,.12) 0%, transparent 70%);
+    }
+    .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(201,151,58,.15); border: 1px solid rgba(201,151,58,.3);
+      color: var(--gold-light); font-size: 12px; font-weight: 600; letter-spacing: .6px;
+      text-transform: uppercase; padding: 5px 12px; border-radius: 20px; margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 4vw, 52px); font-weight: 800; color: #fff;
+      letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--gold-light); }
+    .hero p { font-size: 17px; color: rgba(255,255,255,.65); line-height: 1.65; margin-bottom: 36px; max-width: 460px; }
+    .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .hero-btn-primary {
+      padding: 14px 28px; border-radius: var(--radius-md);
+      font-size: 15px; font-weight: 600;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--navy); border: none; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(201,151,58,.4);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,151,58,.45); }
+    .hero-btn-secondary {
+      padding: 14px 28px; border-radius: var(--radius-md);
+      font-size: 15px; font-weight: 600;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2);
+      color: #fff; cursor: pointer; transition: background .15s;
+    }
+    .hero-btn-secondary:hover { background: rgba(255,255,255,.13); }
+    .hero-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius-lg);
+      padding: 28px; backdrop-filter: blur(8px);
+    }
+    .hero-card-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.5); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 20px; }
+    .rate-list { display: flex; flex-direction: column; gap: 14px; }
+    .rate-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border-radius: var(--radius-md);
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+    }
+    .rate-item-left { display: flex; align-items: center; gap: 12px; }
+    .rate-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .rate-item-name { font-size: 14px; font-weight: 600; color: #fff; }
+    .rate-item-cat { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 1px; }
+    .rate-value { font-size: 18px; font-weight: 700; color: var(--gold-light); }
+    .rate-basis { font-size: 10px; color: rgba(255,255,255,.4); text-align: right; margin-top: 1px; }
+
+    /* ── Stats bar ────────────────────────────────────────────── */
+    .stats-bar { background: var(--navy-mid); padding: 28px 24px; }
+    .stats-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .stat { text-align: center; padding: 8px; }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--gold-light); letter-spacing: -1px; }
+    .stat-label { font-size: 13px; color: rgba(255,255,255,.55); margin-top: 3px; }
+
+    /* ── Section shared ───────────────────────────────────────── */
+    .section { padding: 80px 24px; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-eyebrow {
+      display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+    }
+    .section-title { font-size: clamp(26px, 3vw, 38px); font-weight: 800; color: var(--text-1); letter-spacing: -1px; margin-bottom: 14px; }
+    .section-sub { font-size: 16px; color: var(--text-2); max-width: 520px; margin: 0 auto; }
+
+    /* ── Products grid ────────────────────────────────────────── */
+    .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .product-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 28px 24px;
+      box-shadow: var(--shadow-sm); transition: transform .2s, box-shadow .2s;
+      position: relative; overflow: hidden;
+    }
+    .product-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .product-card.deposit::before  { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+    .product-card.loan::before     { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+    .product-card.card::before     { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
+    .product-card.mortgage::before { background: linear-gradient(90deg, #10b981, #34d399); }
+    .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .product-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 16px;
+    }
+    .product-card.deposit  .product-icon { background: #eff6ff; }
+    .product-card.loan     .product-icon { background: #fffbeb; }
+    .product-card.card     .product-icon { background: #f5f3ff; }
+    .product-card.mortgage .product-icon { background: #ecfdf5; }
+    .product-name { font-size: 16px; font-weight: 700; color: var(--text-1); margin-bottom: 6px; }
+    .product-desc { font-size: 13px; color: var(--text-2); margin-bottom: 20px; line-height: 1.5; }
+    .product-rate-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
+    .product-rate { font-size: 26px; font-weight: 800; color: var(--navy); }
+    .product-rate-basis { font-size: 12px; font-weight: 600; color: var(--text-3); }
+    .product-rate-label { font-size: 12px; color: var(--text-3); margin-bottom: 20px; }
+    .product-cta {
+      width: 100%; padding: 10px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      border: 1.5px solid var(--border); background: transparent;
+      color: var(--text-1); transition: all .15s;
+    }
+    .product-cta:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+    /* ── Features ─────────────────────────────────────────────── */
+    .features-bg { background: var(--navy); }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .feature-card {
+      padding: 32px 28px; border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+      transition: background .2s;
+    }
+    .feature-card:hover { background: rgba(255,255,255,.07); }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: rgba(201,151,58,.15); border: 1px solid rgba(201,151,58,.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 20px;
+    }
+    .feature-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .feature-desc { font-size: 14px; color: rgba(255,255,255,.55); line-height: 1.65; }
+    .features-bg .section-title { color: #fff; }
+    .features-bg .section-sub { color: rgba(255,255,255,.55); }
+
+    /* ── Rates table ──────────────────────────────────────────── */
+    .rates-table { width: 100%; border-collapse: collapse; }
+    .rates-table thead tr { background: var(--navy); color: #fff; }
+    .rates-table thead th { padding: 14px 20px; font-size: 13px; font-weight: 600; text-align: left; }
+    .rates-table thead th:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+    .rates-table thead th:last-child  { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+    .rates-table tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+    .rates-table tbody tr:hover { background: #f1f5f9; }
+    .rates-table tbody td { padding: 14px 20px; font-size: 14px; color: var(--text-2); }
+    .rates-table .td-product { font-weight: 600; color: var(--text-1); }
+    .rates-table .td-rate { font-weight: 700; color: var(--navy); }
+    .rate-tag {
+      display: inline-block; padding: 2px 8px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+    }
+    .rate-tag.apy { background: #dbeafe; color: #1e40af; }
+    .rate-tag.apr { background: #fef3c7; color: #92400e; }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer { background: #060f1c; color: rgba(255,255,255,.5); padding: 52px 24px 28px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand p { font-size: 13px; line-height: 1.7; margin-top: 14px; max-width: 280px; }
+    .footer-col h4 { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.8); letter-spacing: .4px; margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 13px; margin-bottom: 10px; transition: color .15s; }
+    .footer-col a:hover { color: rgba(255,255,255,.85); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.07); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px;
+    }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { transition: color .15s; }
+    .footer-legal a:hover { color: rgba(255,255,255,.8); }
+    .fdic-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      padding: 5px 12px; border-radius: var(--radius-sm);
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,.6); letter-spacing: .5px;
+    }
+
+    /* ─────────────────────────────────────────────────────────── */
+    /* ── CHATBOT WIDGET ──────────────────────────────────────── */
+    /* ─────────────────────────────────────────────────────────── */
+    #chat-root { position: fixed; bottom: 28px; right: 28px; z-index: 9999; font-family: 'Inter', sans-serif; }
+
+    .chat-fab {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+      border: 2px solid rgba(201,151,58,.4);
+      box-shadow: 0 6px 24px rgba(0,0,0,.35), 0 0 0 0 rgba(201,151,58,.4);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 24px; color: #fff;
+      transition: transform .2s, box-shadow .2s;
+      animation: pulse-ring 2.8s ease-out infinite;
+    }
+    .chat-fab:hover { transform: scale(1.08); }
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 6px 24px rgba(0,0,0,.35), 0 0 0 0 rgba(201,151,58,.5); }
+      70%  { box-shadow: 0 6px 24px rgba(0,0,0,.35), 0 0 0 16px rgba(201,151,58,.0); }
+      100% { box-shadow: 0 6px 24px rgba(0,0,0,.35), 0 0 0 0 rgba(201,151,58,.0); }
+    }
+    .chat-unread {
+      position: absolute; top: -2px; right: -2px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #ef4444; border: 2px solid #fff;
+      font-size: 10px; font-weight: 700; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .chat-window {
+      position: absolute; bottom: 76px; right: 0;
+      width: 380px; height: 580px;
+      background: var(--card); border-radius: var(--radius-lg);
+      box-shadow: 0 20px 60px rgba(0,0,0,.22), 0 4px 16px rgba(0,0,0,.12);
+      display: flex; flex-direction: column; overflow: hidden;
+      transform-origin: bottom right;
+      animation: chat-open .22s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes chat-open {
+      from { opacity: 0; transform: scale(.85) translateY(16px); }
+      to   { opacity: 1; transform: scale(1)   translateY(0); }
+    }
+
+    /* chat header */
+    .chat-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      padding: 16px 18px; display: flex; align-items: center; gap: 12px;
+      flex-shrink: 0;
+    }
+    .chat-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .chat-header-info { flex: 1; }
+    .chat-agent-name { font-size: 14px; font-weight: 700; color: #fff; }
+    .chat-status { display: flex; align-items: center; gap: 5px; font-size: 11px; color: rgba(255,255,255,.6); margin-top: 2px; }
+    .chat-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
+    .chat-close {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(255,255,255,.1); border: none; color: rgba(255,255,255,.7);
+      cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .chat-close:hover { background: rgba(255,255,255,.2); color: #fff; }
+
+    /* customer selector */
+    .chat-customer-bar {
+      padding: 10px 14px; background: #f8fafc; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    }
+    .chat-customer-bar label { font-size: 11px; font-weight: 600; color: var(--text-3); white-space: nowrap; text-transform: uppercase; letter-spacing: .5px; }
+    .chat-customer-bar select {
+      flex: 1; font-size: 12px; font-family: inherit; padding: 5px 8px;
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      background: #fff; color: var(--text-1); outline: none;
+      transition: border-color .15s;
+    }
+    .chat-customer-bar select:focus { border-color: var(--navy-light); }
+
+    .chat-live-toggle {
+      display: flex; align-items: center; gap: 8px; padding: 8px 14px;
+      background: #f8fafc; border-bottom: 1px solid var(--border);
+      font-size: 12px; font-weight: 600; color: var(--text-2); cursor: pointer;
+      flex-shrink: 0;
+    }
+    .chat-live-toggle input { cursor: pointer; }
+
+    /* quick scenarios */
+    .chat-scenarios {
+      padding: 10px 14px 6px; border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .chat-scenarios-label { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 7px; }
+    .chat-scenarios-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .scenario-chip {
+      padding: 4px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 500; cursor: pointer;
+      background: #f1f5f9; border: 1px solid var(--border); color: var(--text-2);
+      transition: all .15s; white-space: nowrap;
+      max-width: 170px; overflow: hidden; text-overflow: ellipsis;
+    }
+    .scenario-chip:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .scenario-chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+    /* messages */
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 16px 14px;
+      display: flex; flex-direction: column; gap: 12px;
+      scroll-behavior: smooth;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .chat-empty {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px; text-align: center; padding: 20px;
+    }
+    .chat-empty-icon { font-size: 36px; }
+    .chat-empty-title { font-size: 14px; font-weight: 600; color: var(--text-1); }
+    .chat-empty-sub { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+
+    .chat-msg { display: flex; flex-direction: column; max-width: 86%; }
+    .chat-msg.user { align-self: flex-end; align-items: flex-end; }
+    .chat-msg.bot  { align-self: flex-start; align-items: flex-start; }
+    .chat-msg-label { font-size: 10px; color: var(--text-3); margin-bottom: 4px; font-weight: 500; }
+    .chat-bubble {
+      padding: 10px 13px; border-radius: 14px;
+      font-size: 13px; line-height: 1.55;
+    }
+    .chat-msg.user .chat-bubble {
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+      color: #fff; border-bottom-right-radius: 3px;
+    }
+    .chat-msg.bot .chat-bubble {
+      background: #f1f5f9; color: var(--text-1);
+      border: 1px solid var(--border); border-bottom-left-radius: 3px;
+    }
+    .chat-msg.bot.error .chat-bubble { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+    .chat-meta { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+    .chat-badge {
+      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: .4px;
+    }
+    .chat-badge.PASS     { background: #dcfce7; color: #166534; }
+    .chat-badge.CORRECT  { background: #fef9c3; color: #854d0e; }
+    .chat-badge.FALLBACK { background: #fee2e2; color: #991b1b; }
+    .chat-badge.scenario { background: #e0e7ff; color: #3730a3; }
+    .chat-badge.live     { background: #fee2e2; color: #b91c1c; margin-left: 6px; }
+
+    .chat-details { margin-top: 6px; }
+    .chat-details-toggle {
+      background: none; border: none; padding: 0; cursor: pointer;
+      font-size: 11px; color: var(--text-3); font-family: inherit; font-weight: 600;
+    }
+    .chat-details-toggle:hover { color: var(--navy-light); }
+    .chat-details-panel {
+      margin-top: 6px; padding: 10px; background: #f8fafc; border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 11px; color: var(--text-2);
+    }
+    .chat-details-section + .chat-details-section { margin-top: 8px; }
+    .chat-details-heading { font-weight: 700; color: var(--text-1); margin-bottom: 3px; text-transform: uppercase; font-size: 10px; letter-spacing: .4px; }
+    .chat-details-panel ul, .chat-details-panel ol { margin: 0; padding-left: 16px; }
+    .chat-details-panel li { margin-bottom: 5px; }
+    .chat-details-panel code { background: #e2e8f0; padding: 1px 4px; border-radius: 3px; font-size: 10px; }
+    .chat-details-row-data { color: var(--text-3); font-size: 10px; margin-top: 1px; }
+    .chat-details-empty { color: var(--text-3); font-style: italic; }
+    .chat-details-tag { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 8px; text-transform: uppercase; }
+    .chat-details-tag.llm  { background: #ede9fe; color: #5b21b6; }
+    .chat-details-tag.rule { background: #dcfce7; color: #166534; }
+    .chat-details-alert {
+      background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-sm);
+      padding: 8px; margin: 0 -2px;
+    }
+    .chat-details-alert .chat-details-heading { color: #991b1b; }
+
+    /* typing / verifying */
+    .typing-bubble { padding: 10px 14px; background: #f1f5f9; border: 1px solid var(--border); border-radius: 14px; border-bottom-left-radius: 3px; }
+    .typing-dots { display: flex; gap: 4px; align-items: center; }
+    .typing-dots span {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--text-3);
+      animation: tdot .9s infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: .15s; }
+    .typing-dots span:nth-child(3) { animation-delay: .3s; }
+    @keyframes tdot { 0%,80%,100%{transform:scale(.75);opacity:.4} 40%{transform:scale(1);opacity:1} }
+
+    .verifying-bubble {
+      padding: 10px 14px; border-radius: 14px; border-bottom-left-radius: 3px;
+      background: #fffbeb; border: 1px solid #fde68a;
+      display: flex; align-items: center; gap: 8px; font-size: 12px; color: #92400e; font-weight: 500;
+    }
+    .shield-spin {
+      display: inline-block; font-size: 16px;
+      animation: shield-pulse 1s ease-in-out infinite;
+    }
+    @keyframes shield-pulse { 0%,100%{opacity:.5;transform:scale(.9)} 50%{opacity:1;transform:scale(1.1)} }
+
+    .chat-original {
+      font-size: 11px; color: var(--text-3); margin-top: 4px; font-style: italic;
+      text-decoration: line-through; opacity: .7; max-width: 100%;
+    }
+
+    /* input */
+    .chat-input-area {
+      padding: 10px 12px; border-top: 1px solid var(--border);
+      display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
+      background: #fff;
+    }
+    .chat-input-area textarea {
+      flex: 1; resize: none; border: 1px solid var(--border); border-radius: 10px;
+      padding: 9px 12px; font-size: 13px; font-family: inherit; outline: none;
+      transition: border-color .15s; line-height: 1.5; max-height: 100px;
+      overflow-y: auto; background: #f8fafc;
+    }
+    .chat-input-area textarea:focus { border-color: var(--navy-light); background: #fff; }
+    .chat-send {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+      color: #fff; border: none; cursor: pointer; font-size: 15px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: opacity .15s, transform .1s;
+    }
+    .chat-send:hover:not(:disabled) { opacity: .85; transform: translateY(-1px); }
+    .chat-send:disabled { opacity: .4; cursor: not-allowed; }
+    .chat-powered {
+      text-align: center; font-size: 10px; color: var(--text-3);
+      padding: 4px 0 8px; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════ STATIC BANK PAGE ════════════════════════ -->
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-mark">FV</div>
+      <div class="logo-name">First<span>Vault</span></div>
+    </div>
+    <nav class="nav">
+      <a href="#products">Personal</a>
+      <a href="#products">Business</a>
+      <a href="#rates">Rates</a>
+      <a href="#features">Why Us</a>
+      <a href="#">About</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-ghost">Sign In</button>
+      <button class="btn-primary">Open Account</button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">🏦 FDIC Insured · Est. 2008</div>
+      <h1>Banking That Works <span>Smarter</span> for You</h1>
+      <p>Competitive rates, zero hidden fees, and a rate-verification gateway that keeps your quotes 100% accurate — every time.</p>
+      <div class="hero-cta">
+        <button class="hero-btn-primary">Open Free Account</button>
+        <button class="hero-btn-secondary">View All Rates →</button>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-title">Today's Featured Rates</div>
+      <div class="rate-list">
+        <div class="rate-item">
+          <div class="rate-item-left">
+            <div class="rate-icon" style="background:rgba(59,130,246,.15)">💰</div>
+            <div>
+              <div class="rate-item-name">High-Yield Savings</div>
+              <div class="rate-item-cat">Deposit · $10k+</div>
+            </div>
+          </div>
+          <div>
+            <div class="rate-value">4.20%</div>
+            <div class="rate-basis">APY</div>
+          </div>
+        </div>
+        <div class="rate-item">
+          <div class="rate-item-left">
+            <div class="rate-icon" style="background:rgba(201,151,58,.15)">📋</div>
+            <div>
+              <div class="rate-item-name">12-Month CD</div>
+              <div class="rate-item-cat">Deposit · $10k+</div>
+            </div>
+          </div>
+          <div>
+            <div class="rate-value">4.85%</div>
+            <div class="rate-basis">APY</div>
+          </div>
+        </div>
+        <div class="rate-item">
+          <div class="rate-item-left">
+            <div class="rate-icon" style="background:rgba(16,185,129,.15)">🏠</div>
+            <div>
+              <div class="rate-item-name">30-Yr Fixed Mortgage</div>
+              <div class="rate-item-cat">Mortgage · 740+ score</div>
+            </div>
+          </div>
+          <div>
+            <div class="rate-value">5.75%</div>
+            <div class="rate-basis">APR</div>
+          </div>
+        </div>
+        <div class="rate-item">
+          <div class="rate-item-left">
+            <div class="rate-icon" style="background:rgba(139,92,246,.15)">💳</div>
+            <div>
+              <div class="rate-item-name">Personal Loan</div>
+              <div class="rate-item-cat">Loan · 740+ score</div>
+            </div>
+          </div>
+          <div>
+            <div class="rate-value">6.99%</div>
+            <div class="rate-basis">APR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats bar -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-value">$4.2B+</div><div class="stat-label">Assets Under Management</div></div>
+    <div class="stat"><div class="stat-value">320K+</div><div class="stat-label">Happy Customers</div></div>
+    <div class="stat"><div class="stat-value">4.9★</div><div class="stat-label">Customer Rating</div></div>
+    <div class="stat"><div class="stat-value">16yr</div><div class="stat-label">Years of Trust</div></div>
+  </div>
+</div>
+
+<!-- Products -->
+<section class="section" id="products">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Our Products</div>
+      <div class="section-title">Every account you need, in one place</div>
+      <div class="section-sub">Tiered rates, transparent fees, and terms designed around you — not the bottom line.</div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card deposit">
+        <div class="product-icon">💰</div>
+        <div class="product-name">Savings Accounts</div>
+        <div class="product-desc">Earn more on your deposits with tiered APY that rewards higher balances.</div>
+        <div class="product-rate-row"><span class="product-rate">4.20%</span><span class="product-rate-basis">APY</span></div>
+        <div class="product-rate-label">On balances ≥ $10,000</div>
+        <button class="product-cta">Learn More</button>
+      </div>
+      <div class="product-card loan">
+        <div class="product-icon">📋</div>
+        <div class="product-name">Personal Loans</div>
+        <div class="product-desc">Fixed-rate personal loans with no prepayment penalty and fast approvals.</div>
+        <div class="product-rate-row"><span class="product-rate">6.99%</span><span class="product-rate-basis">APR</span></div>
+        <div class="product-rate-label">For 740+ credit score</div>
+        <button class="product-cta">Learn More</button>
+      </div>
+      <div class="product-card card">
+        <div class="product-icon">💳</div>
+        <div class="product-name">Credit Cards</div>
+        <div class="product-desc">Rewards and cash back cards with 0% intro APR for the first 12–15 cycles.</div>
+        <div class="product-rate-row"><span class="product-rate">0%</span><span class="product-rate-basis">APR</span></div>
+        <div class="product-rate-label">Intro rate, first 15 cycles</div>
+        <button class="product-cta">Learn More</button>
+      </div>
+      <div class="product-card mortgage">
+        <div class="product-icon">🏠</div>
+        <div class="product-name">Mortgages</div>
+        <div class="product-desc">15 and 30-year fixed mortgages with competitive rates and no hidden closing fees.</div>
+        <div class="product-rate-row"><span class="product-rate">5.50%</span><span class="product-rate-basis">APR</span></div>
+        <div class="product-rate-label">15-yr fixed, 740+ score</div>
+        <button class="product-cta">Learn More</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Rates table -->
+<section class="section" id="rates" style="background:#fff; padding-top:60px; padding-bottom:60px;">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Live Rate Sheet</div>
+      <div class="section-title">Current rates, updated daily</div>
+      <div class="section-sub">All rates shown are effective as of today. Ask our assistant to check your personalised rate.</div>
+    </div>
+    <div style="border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--border);">
+      <table class="rates-table">
+        <thead>
+          <tr>
+            <th>Product</th><th>Category</th><th>Tier Condition</th>
+            <th>Rate</th><th>Basis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="td-product">Everyday Savings</td><td>Deposit</td><td>Balance &lt; $5,000</td><td class="td-rate">0.50%</td><td><span class="rate-tag apy">APY</span></td></tr>
+          <tr><td class="td-product">Everyday Savings</td><td>Deposit</td><td>Balance ≥ $5,000</td><td class="td-rate">0.90%</td><td><span class="rate-tag apy">APY</span></td></tr>
+          <tr><td class="td-product">High-Yield Savings</td><td>Deposit</td><td>Balance &lt; $10,000</td><td class="td-rate">3.80%</td><td><span class="rate-tag apy">APY</span></td></tr>
+          <tr><td class="td-product">High-Yield Savings</td><td>Deposit</td><td>Balance ≥ $10,000</td><td class="td-rate">4.20%</td><td><span class="rate-tag apy">APY</span></td></tr>
+          <tr><td class="td-product">12-Month CD</td><td>Deposit</td><td>Balance ≥ $10,000</td><td class="td-rate">4.85%</td><td><span class="rate-tag apy">APY</span></td></tr>
+          <tr><td class="td-product">Personal Loan</td><td>Loan</td><td>Credit score ≥ 740</td><td class="td-rate">6.99%</td><td><span class="rate-tag apr">APR</span></td></tr>
+          <tr><td class="td-product">Personal Loan</td><td>Loan</td><td>Credit score 580–739</td><td class="td-rate">14.99%</td><td><span class="rate-tag apr">APR</span></td></tr>
+          <tr><td class="td-product">Auto Loan</td><td>Loan</td><td>Credit score ≥ 740</td><td class="td-rate">5.25%</td><td><span class="rate-tag apr">APR</span></td></tr>
+          <tr><td class="td-product">Rewards Credit Card</td><td>Card</td><td>Intro (15 cycles)</td><td class="td-rate">0.00%</td><td><span class="rate-tag apr">APR</span></td></tr>
+          <tr><td class="td-product">Rewards Credit Card</td><td>Card</td><td>Standard</td><td class="td-rate">22.99%</td><td><span class="rate-tag apr">APR</span></td></tr>
+          <tr><td class="td-product">30-Year Fixed Mortgage</td><td>Mortgage</td><td>Credit score ≥ 740</td><td class="td-rate">5.75%</td><td><span class="rate-tag apr">APR</span></td></tr>
+          <tr><td class="td-product">15-Year Fixed Mortgage</td><td>Mortgage</td><td>Credit score ≥ 740</td><td class="td-rate">5.50%</td><td><span class="rate-tag apr">APR</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section features-bg" id="features">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Why FirstVault</div>
+      <div class="section-title">Built on accuracy, not promises</div>
+      <div class="section-sub">Every rate quote is verified in real time against our live rate sheet before it reaches you.</div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-title">Rate Verification Gateway</div>
+        <div class="feature-desc">Our AI assistant cross-checks every rate claim against the live pricing database before responding — catching stale rates, wrong tiers, and product mix-ups automatically.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-title">Grandfathered Rate Protection</div>
+        <div class="feature-desc">If you locked in a rate before market changes, we honour it. Our system distinguishes your actual locked-in rate from today's catalog so you're never shortchanged.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Instant Account Lookup</div>
+        <div class="feature-desc">Ask about your account and get answers from your real record — not a generic product page. Personalised, accurate, and instant every time.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Tiered Transparency</div>
+        <div class="feature-desc">Every product has clearly published tiers. No surprise rate changes at the counter — what you see on the rate sheet is what you get.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏅</div>
+        <div class="feature-title">FDIC Insured</div>
+        <div class="feature-desc">Your deposits are federally insured up to $250,000. Banking with FirstVault means banking with confidence and the full backing of federal protection.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title">AI-Powered Support</div>
+        <div class="feature-desc">Our virtual assistant is available 24/7 and backed by a verification layer that catches hallucinations before they reach you. Ask anything — we'll get it right.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-mark">FV</div>
+          <div class="logo-name" style="color:rgba(255,255,255,.85)">First<span>Vault</span></div>
+        </div>
+        <p>A demo banking platform powered by an AI rate-verification gateway. All data is fictional and for demonstration purposes only.</p>
+        <div class="fdic-badge" style="margin-top:16px">🏛 FDIC Insured</div>
+      </div>
+      <div class="footer-col">
+        <h4>Personal</h4>
+        <a href="#">Savings Accounts</a>
+        <a href="#">Checking Accounts</a>
+        <a href="#">Credit Cards</a>
+        <a href="#">Personal Loans</a>
+        <a href="#">Mortgages</a>
+      </div>
+      <div class="footer-col">
+        <h4>Business</h4>
+        <a href="#">Business Checking</a>
+        <a href="#">Business Loans</a>
+        <a href="#">Merchant Services</a>
+        <a href="#">Treasury</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="#">Rate Sheet</a>
+        <a href="#">FAQs</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Branch Locator</a>
+        <a href="#">Security</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 FirstVault Bank, N.A. — Demo project. All rates fictional.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Accessibility</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════ REACT CHATBOT WIDGET ═════════════════════ -->
+<div id="chat-root"></div>
+
+<script type="text/babel">
+// Local: http://localhost:8000.  AWS: open index.html?api=<Lambda function URL>
+const API = (new URLSearchParams(location.search).get("api") || "http://localhost:8000").replace(/\/$/, "");
+
+
+function ChatWidget() {
+  const [open, setOpen]             = React.useState(false);
+  const [customers, setCustomers]   = React.useState([]);
+  const [testCases, setTestCases]   = React.useState([]);
+  const [customerId, setCustomerId] = React.useState("");
+  const [messages, setMessages]     = React.useState([]);
+  const [input, setInput]           = React.useState("");
+  const [loadPhase, setLoadPhase]   = React.useState(null); // null | "typing" | "verifying"
+  const [hasUnread, setHasUnread]   = React.useState(true);
+  const [activeChip, setActiveChip] = React.useState(null);
+  const [expandedDetails, setExpandedDetails] = React.useState(new Set());
+  const bottomRef = React.useRef(null);
+
+  function toggleDetails(i) {
+    setExpandedDetails(prev => {
+      const next = new Set(prev);
+      next.has(i) ? next.delete(i) : next.add(i);
+      return next;
+    });
+  }
+
+  React.useEffect(() => {
+    fetch(`${API}/customers`).then(r => r.json()).then(setCustomers).catch(() => {});
+    fetch(`${API}/sample-questions`).then(r => r.json()).then(setTestCases).catch(() => {});
+  }, []);
+
+  React.useEffect(() => {
+    if (open) setHasUnread(false);
+  }, [open]);
+
+  React.useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loadPhase]);
+
+  const visibleCases = testCases.filter(tc =>
+    customerId ? tc.customer_id === customerId : tc.customer_id === ""
+  ).slice(0, 6);
+
+  async function send(question, cid) {
+    const resolvedCid = cid ?? customerId;
+    if (!question.trim()) return;
+    setMessages(m => [...m, { role: "user", text: question }]);
+    setInput("");
+    setActiveChip(null);
+
+    try {
+      // ── Phase 1: the LLM chatbot answers (never scripted) ──────────
+      setLoadPhase("typing");
+      const chatRes = await fetch(`${API}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customer_id: resolvedCid, customer_question: question }),
+      });
+      if (!chatRes.ok) {
+        const err = await chatRes.json();
+        setMessages(m => [...m, { role: "bot", text: `⚠️ ${err.detail}`, error: true }]);
+        setLoadPhase(null);
+        return;
+      }
+      const chatData = await chatRes.json();
+      const rawResponse = chatData.bot_response;
+
+      // ── Phase 2: run the gateway to verify / correct ──────────────
+      setLoadPhase("verifying");
+      let finalText  = rawResponse;
+      let action     = "PASS";
+      let originalText = null;
+      let reliability = null;
+      let references  = null;
+      let lineage      = null;
+      let humanReview  = null;
+      let trustSignals = null;
+
+      try {
+        const verifyRes = await fetch(`${API}/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            customer_id: resolvedCid,
+            customer_question: question,
+            bot_response: rawResponse,
+          }),
+        });
+        if (verifyRes.ok) {
+          const v = await verifyRes.json();
+          action      = v.action;
+          finalText   = v.final_response;
+          reliability = v.reliability;
+          references  = v.references;
+          lineage     = v.lineage;
+          humanReview = v.human_review;
+          trustSignals = v.trust_signals;
+          // Only show original if the gateway actually changed the response
+          if (action === "CORRECT" && v.original_response !== v.final_response) {
+            originalText = v.original_response;
+          }
+        }
+      } catch(_e) {
+        // Gateway unreachable — show the raw response with no badge
+      }
+
+      setMessages(m => [...m, {
+        role: "bot",
+        text: finalText,
+        originalText,
+        action,
+        live: chatData.live === true,
+        reliability,
+        references,
+        lineage,
+        humanReview,
+        trustSignals,
+      }]);
+    } catch(_err) {
+      setMessages(m => [...m, { role: "bot", text: "Unable to reach the API server. Make sure uvicorn is running on port 8000.", error: true }]);
+    }
+    setLoadPhase(null);
+  }
+
+  function handleKey(e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); }
+  }
+
+  function pickChip(tc) {
+    setActiveChip(tc.id);
+    setInput(tc.customer_question);
+    if (tc.customer_id && tc.customer_id !== customerId) setCustomerId(tc.customer_id);
+  }
+
+  return (
+    <div id="chat-root-inner">
+      {open && (
+        <div className="chat-window">
+          {/* Header */}
+          <div className="chat-header">
+            <div className="chat-avatar">🤖</div>
+            <div className="chat-header-info">
+              <div className="chat-agent-name">FirstVault Assistant</div>
+              <div className="chat-status"><span className="chat-dot" />Online · Rate-verified</div>
+            </div>
+            <button className="chat-close" onClick={() => setOpen(false)}>✕</button>
+          </div>
+
+          {/* Customer selector */}
+          <div className="chat-customer-bar">
+            <label>Customer</label>
+            <select value={customerId} onChange={e => { setCustomerId(e.target.value); setMessages([]); setActiveChip(null); }}>
+              <option value="">General enquiry</option>
+              {customers.map(c => (
+                <option key={c.customer_id} value={c.customer_id}>
+                  {c.first_name} {c.last_name} · {c.credit_score}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Scenario chips */}
+          {visibleCases.length > 0 && (
+            <div className="chat-scenarios">
+              <div className="chat-scenarios-label">Try asking</div>
+              <div className="chat-scenarios-chips">
+                {visibleCases.map(tc => (
+                  <div
+                    key={tc.id}
+                    className={`scenario-chip ${activeChip === tc.id ? "active" : ""}`}
+                    title={tc.customer_question}
+                    onClick={() => pickChip(tc)}
+                  >
+                    {tc.customer_question.length > 42 ? tc.customer_question.slice(0, 40) + "…" : tc.customer_question}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Messages */}
+          <div className="chat-messages">
+            {messages.length === 0 && !loadPhase && (
+              <div className="chat-empty">
+                <div className="chat-empty-icon">💬</div>
+                <div className="chat-empty-title">How can I help you today?</div>
+                <div className="chat-empty-sub">Ask about rates or your account. Answers come from an AI model and are verified before you see them.</div>
+              </div>
+            )}
+
+            {messages.map((msg, i) => (
+              <div key={i} className={`chat-msg ${msg.role}${msg.error ? " error" : ""}`}>
+                <div className="chat-msg-label">
+                  {msg.role === "user" ? "You" : "Assistant"}
+                  {msg.live && <span className="chat-badge live">AI</span>}
+                </div>
+                <div className="chat-bubble">{msg.text}</div>
+                {msg.role === "bot" && !msg.error && msg.originalText && (
+                  <div className="chat-original">Was: {msg.originalText}</div>
+                )}
+                {msg.role === "bot" && !msg.error && msg.action && (
+                  <div className="chat-meta">
+                    <span className={`chat-badge ${msg.action}`}>{
+                      msg.action === "PASS" ? "✓ Verified" :
+                      msg.action === "CORRECT" ? "✎ Corrected" :
+                      "⚠ Escalated"
+                    }</span>
+                  </div>
+                )}
+                {msg.role === "bot" && !msg.error && msg.reliability && (
+                  <div className="chat-details">
+                    <button className="chat-details-toggle" onClick={() => toggleDetails(i)}>
+                      {expandedDetails.has(i) ? "▾" : "▸"} Details — reliability {msg.reliability.score}/100 ({msg.reliability.label})
+                    </button>
+                    {expandedDetails.has(i) && (
+                      <div className="chat-details-panel">
+                        <div className="chat-details-section">
+                          <div className="chat-details-heading">Reliability</div>
+                          <div>{msg.reliability.score}/100 — {msg.reliability.label}. {msg.reliability.reason}</div>
+                        </div>
+                        {msg.humanReview && msg.humanReview.required && (
+                          <div className="chat-details-section chat-details-alert">
+                            <div className="chat-details-heading">⚠ Human Review Required</div>
+                            <div>{msg.humanReview.note}</div>
+                            <div className="chat-details-row-data" style={{marginTop: 4}}>Reasons: {msg.humanReview.reasons.join("; ")}</div>
+                            <div style={{marginTop: 6, fontWeight: 600}}>Candidate matches (unconfirmed, keyword search):</div>
+                            {msg.humanReview.candidate_matches.length === 0 && (
+                              <div className="chat-details-empty">No candidate products found in golden_dataset by keyword search either.</div>
+                            )}
+                            <ul>
+                              {msg.humanReview.candidate_matches.map((c, ci) => (
+                                <li key={ci}>
+                                  {c.row.product_name} ({c.row.product_id}) — matched on: {c.matched_keywords.join(", ")}
+                                </li>
+                              ))}
+                            </ul>
+                            <div style={{marginTop: 4}}>{msg.humanReview.probable_route}</div>
+                          </div>
+                        )}
+                        <div className="chat-details-section">
+                          <div className="chat-details-heading">References ({(msg.references || []).length})</div>
+                          {(msg.references || []).length === 0 && <div className="chat-details-empty">No golden_dataset rows were consulted.</div>}
+                          <ul>
+                            {(msg.references || []).map((r, ri) => (
+                              <li key={ri}>
+                                <code>{r.file}</code> — {r.why}
+                                <div className="chat-details-row-data">{Object.entries(r.row).map(([k, v]) => `${k}=${v}`).join("  ·  ")}</div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        {msg.trustSignals && (
+                          <div className="chat-details-section">
+                            <div className="chat-details-heading">Trust signals (deterministic)</div>
+                            <ul>
+                              {msg.trustSignals.claims.map((c, ci) => (
+                                <li key={ci}>
+                                  {c.claim_text ? <code>{c.claim_text}</code> : "response"} — {c.action}
+                                  <div className="chat-details-row-data">
+                                    {["provenance", "reliability", "freshness", "agreement"].map(k => `${k} ${c[k].score} (${c[k].why})`).join("  ·  ")}
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                            {msg.trustSignals.conflicts.length > 0 && (
+                              <div style={{marginTop: 4}}>
+                                Conflicting sources (outranked by the system of record):
+                                <ul>
+                                  {msg.trustSignals.conflicts.map((x, xi) => (
+                                    <li key={xi}><code>{x.file}</code> row {x.row_id} ({x.source_tier}, as of {x.as_of}): {x.statement}{x.bot_repeated_this ? " — the bot repeated this" : ""}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        <div className="chat-details-section">
+                          <div className="chat-details-heading">Lineage</div>
+                          <ol>
+                            {(msg.lineage || []).map((s, si) => (
+                              <li key={si}>
+                                <span className={`chat-details-tag ${s.uses_llm ? "llm" : "rule"}`}>{s.uses_llm ? "LLM" : "rule-based"}</span>
+                                {" "}<code>{s.component}</code>
+                                <div className="chat-details-row-data">{s.description || `${s.claim_text ? `claim="${s.claim_text}" — ` : ""}${s.reason || ""}`}</div>
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {loadPhase === "typing" && (
+              <div className="chat-msg bot">
+                <div className="chat-msg-label">Assistant</div>
+                <div className="typing-bubble">
+                  <div className="typing-dots"><span/><span/><span/></div>
+                </div>
+              </div>
+            )}
+            {loadPhase === "verifying" && (
+              <div className="chat-msg bot">
+                <div className="chat-msg-label">Gateway</div>
+                <div className="verifying-bubble">
+                  <span className="shield-spin">🛡</span>
+                  Verifying response against rate sheet…
+                </div>
+              </div>
+            )}
+            <div ref={bottomRef} />
+          </div>
+
+          {/* Input */}
+          <div className="chat-input-area">
+            <textarea
+              rows={1}
+              placeholder="Ask about rates, your account…"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKey}
+            />
+            <button className="chat-send" onClick={() => send(input)} disabled={!!loadPhase || !input.trim()}>➤</button>
+          </div>
+          <div className="chat-powered">Powered by Data2Intelligence · Rate-verified responses</div>
+        </div>
+      )}
+
+      {/* FAB */}
+      <div className="chat-fab" onClick={() => setOpen(o => !o)} title="Chat with us">
+        {open ? "✕" : "💬"}
+        {hasUnread && !open && <div className="chat-unread">1</div>}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("chat-root")).render(<ChatWidget />);
+</script>
+</body>
+</html>

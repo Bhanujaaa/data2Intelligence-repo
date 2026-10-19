@@ -1,0 +1,7 @@
+file,source_tier,data_type,shelf_life_days,owner
+golden_dataset/pricing_rules.csv,system_of_record,pricing,180,Treasury & Pricing
+golden_dataset/products.csv,system_of_record,catalog,365,Product Management
+golden_dataset/accounts.csv,system_of_record,account,1,Core Banking
+golden_dataset/customers.csv,system_of_record,customer,1,Core Banking
+secondary_sources/branch_faq.csv,internal_wiki,faq,180,Branch Operations
+secondary_sources/marketing_page.csv,marketing,marketing,90,Marketing

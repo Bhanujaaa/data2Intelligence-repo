@@ -1,0 +1,4 @@
+row_id,product_id,statement,claim_type,value,basis,as_of
+F1,SAV002,"High-Yield Savings pays 4.50% APY on $10,000 or more.",rate,4.50,APY,2026-07-20
+F2,LOAN001,"Personal Loans start at 6.99% APR.",rate,6.99,APR,2025-11-02
+F3,CD001,"12-Month CD pays 4.85% APY on $10,000 or more.",rate,4.85,APY,2026-08-25

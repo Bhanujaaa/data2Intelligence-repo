@@ -1,0 +1,30 @@
+# Secrets
+.config
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# macOS
+.DS_Store
+
+# Output (regenerable — omit if you want to track generated CSVs)
+# fake_data/output/
+
+# AWS SAM
+.aws-sam/
+samconfig.toml
+
+# Runtime output (regenerated on every run)
+gateway/logs/
+gateway/output/
+bot/output/
+
+# Installers
+*.pkg
