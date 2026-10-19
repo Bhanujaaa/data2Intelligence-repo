@@ -14,9 +14,6 @@ env/
 # macOS
 .DS_Store
 
-# Output (regenerable — omit if you want to track generated CSVs)
-# fake_data/output/
-
 # AWS SAM
 .aws-sam/
 samconfig.toml
@@ -24,7 +21,8 @@ samconfig.toml
 # Runtime output (regenerated on every run)
 gateway/logs/
 gateway/output/
-bot/output/
+chatbot/output/
 
 # Installers
 *.pkg
+.pytest_cache/

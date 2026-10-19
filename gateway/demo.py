@@ -1,8 +1,7 @@
 """
-Terminal demo: ask the LLM chatbot, then verify its answer with the gateway.
-===========================================================================
-Nothing is scripted — the bot's answer is generated live each time, so the
-verdict (PASS / CORRECT / FALLBACK) depends on what the model says.
+Terminal demo: ask the chatbot, then verify its answer with the gateway.
+=======================================================================
+The verdict (PASS / CORRECT / FALLBACK) depends on what the model says.
 
 Usage:
     python gateway/demo.py --customer CUST003 "What APR would I get on a Personal Loan?"
@@ -15,7 +14,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from bot.bot import get_bot_response          # noqa: E402
+from chatbot.assistant import generate_answer  # noqa: E402
 from gateway.gateway import run_gateway        # noqa: E402
 from gateway.pii import mask_pii               # noqa: E402
 
@@ -30,9 +29,9 @@ def main():
     a = p.parse_args()
 
     question, _ = mask_pii(a.question)
-    answer = get_bot_response(a.customer, question)["bot_response"]
+    answer = generate_answer(a.customer, question)["bot_response"]
     print(f"\n{BOLD}Question{RESET} : {question}")
-    print(f"{BOLD}LLM bot{RESET}  : {answer}\n")
+    print(f"{BOLD}Chatbot{RESET}  : {answer}\n")
 
     r = run_gateway({"customer_id": a.customer, "customer_question": question, "bot_response": answer})
     act = r["action"]

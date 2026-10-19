@@ -7,7 +7,7 @@ This step is 100% rule-based — never an LLM judgment call.
 Why: a compliance check must be auditable and explainable. You cannot tell a bank's
 compliance team "the AI decided the rate was correct."
 
-Tolerance: ±0.1% for rates, ±$1 for fees (per GATEWAY_BUILD_INSTRUCTIONS).
+Tolerance: ±0.1% for rates, ±$1 for fees (see docs/gateway_design.md).
 """
 
 import csv

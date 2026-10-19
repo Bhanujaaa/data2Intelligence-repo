@@ -1,6 +1,6 @@
 """
-AWS Lambda entry point — runs the existing FastAPI app (bot/api.py) unchanged.
-==============================================================================
+AWS Lambda entry point — runs the FastAPI app (api/main.py) unchanged.
+=========================================================================
 Lambda function URL  ->  Mangum  ->  FastAPI routes (/chat, /verify, /customers, ...)
 
 Cold start:
@@ -14,7 +14,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 os.environ.setdefault("GATEWAY_WRITE_DIR", "/tmp/gateway")
-os.environ.setdefault("BOT_WRITE_DIR", "/tmp/bot")
+os.environ.setdefault("CHATBOT_WRITE_DIR", "/tmp/chatbot")
 
 _param = os.environ.get("GROQ_KEY_PARAM")
 if _param and not os.environ.get("GROQ_API_KEY"):
@@ -23,6 +23,6 @@ if _param and not os.environ.get("GROQ_API_KEY"):
         Name=_param, WithDecryption=True)["Parameter"]["Value"]
 
 from mangum import Mangum          # noqa: E402
-from bot.api import app            # noqa: E402
+from api.main import app           # noqa: E402
 
 handler = Mangum(app, lifespan="off")

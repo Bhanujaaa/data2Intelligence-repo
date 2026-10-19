@@ -832,7 +832,7 @@ function ChatWidget() {
     setActiveChip(null);
 
     try {
-      // ── Phase 1: the LLM chatbot answers (never scripted) ──────────
+      // ── Phase 1: the LLM chatbot answers ────────────────────────────
       setLoadPhase("typing");
       const chatRes = await fetch(`${API}/chat`, {
         method: "POST",

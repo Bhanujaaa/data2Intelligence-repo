@@ -33,9 +33,9 @@ set a billing alarm.
 | `secondary_sources/*.csv` (new) | a stale branch FAQ and a marketing page, to show conflicts |
 | `gateway/verify.py` | **bug fix:** general questions now use the balance / credit score in the conversation; before, a stale 4.50% was "corrected" to 3.80% instead of 4.20% |
 | `gateway/gateway.py` | PII masking, trust signals, freshness gate, DynamoDB audit, writable dir via env |
-| `bot/bot.py`, `bot/api.py` | **chatbot answers always come from the LLM** (scripted answers removed); PII masked; no names sent; `/sample-questions` replaces `/test-cases` |
-| `tests/fixtures/gateway_test_cases.csv` | the old hand-written answers, now used only to test the rules offline |
-| `ui/index.html` | no scripted mode; question suggestions; API URL from `?api=`; shows trust signals and conflicts |
+| `chatbot/assistant.py`, `api/main.py` | chatbot answers come from the LLM; PII masked; no names sent; `/sample-questions` replaces `/test-cases` |
+| `tests/fixtures/gateway_test_cases.csv` | known-bad answers used to test the rules offline |
+| `ui/index.html` | question suggestions; API URL from `?api=`; shows trust signals and conflicts |
 | `aws/handler.py`, `template.yaml` | Lambda entry point (Mangum) and SAM template |
 | `tests/` | 13 offline tests (gateway rules with fixtures; chatbot with a mocked LLM) |
 
@@ -50,9 +50,9 @@ sam build
 sam deploy --guided             # note the ApiUrl output
 open "ui/index.html?api=<ApiUrl without trailing slash>"
 ```
-To verify a batch of live answers locally (spacing calls for the Groq free plan):
+To verify a batch of answers locally (spacing calls for the Groq free plan):
 ```bash
-python bot/run_bot.py --delay 4
+python scripts/run_sample_questions.py --delay 4
 python gateway/gateway.py --batch
 ```
 

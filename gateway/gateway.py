@@ -1,7 +1,7 @@
 """
 Gateway Orchestrator
 ====================
-Reads bot/output/last_response.json, runs the full LLM + deterministic pipeline,
+Reads chatbot/output/last_response.json, runs the full LLM + deterministic pipeline,
 applies corrections, and writes:
   - gateway/output/gateway_result.json   (full audit payload)
   - gateway/logs/audit_log.csv           (one row per claim, append mode)
@@ -34,8 +34,8 @@ from gateway.trust_signals      import evaluate as evaluate_trust
 
 _PROJECT_ROOT    = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _GOLDEN_DIR      = os.path.join(_PROJECT_ROOT, "golden_dataset")
-_LAST_RESPONSE   = os.path.join(_PROJECT_ROOT, "bot",     "output", "last_response.json")
-_BATCH_RESPONSES = os.path.join(_PROJECT_ROOT, "bot",     "output", "responses.json")
+_LAST_RESPONSE   = os.path.join(_PROJECT_ROOT, "chatbot", "output", "last_response.json")
+_BATCH_RESPONSES = os.path.join(_PROJECT_ROOT, "chatbot", "output", "responses.json")
 # On AWS Lambda only /tmp is writable: set GATEWAY_WRITE_DIR=/tmp there.
 _WRITE_ROOT      = os.environ.get("GATEWAY_WRITE_DIR", os.path.join(_PROJECT_ROOT, "gateway"))
 _OUTPUT_DIR      = os.path.join(_WRITE_ROOT, "output")
@@ -423,7 +423,7 @@ def verify_last_response():
 
 def verify_batch():
     if not os.path.exists(_BATCH_RESPONSES):
-        print(f"ERROR: {_BATCH_RESPONSES} not found. Run bot/run_bot.py first.")
+        print(f"ERROR: {_BATCH_RESPONSES} not found. Run scripts/run_sample_questions.py first.")
         sys.exit(1)
 
     with open(_BATCH_RESPONSES, encoding="utf-8") as f:

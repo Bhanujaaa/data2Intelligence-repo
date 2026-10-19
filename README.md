@@ -9,7 +9,7 @@ exact data rows behind it, four trust signals and an audit record.
 
 > **AI reads. Rules decide. The data explains why.**
 
-Built at a hackathon for a fictional bank, **FirstVault**. All data is made up.
+Built at a hackathon for **FirstVault**, a fictional bank.
 
 ---
 
@@ -19,7 +19,7 @@ Built at a hackathon for a fictional bank, **FirstVault**. All data is made up.
 Customer question
       │
       ▼
- mask PII ──► LLM chatbot (Groq) ──► answer text          ← never scripted
+ mask PII ──► LLM chatbot (Groq) ──► answer text
                                          │
                                          ▼
                     Gateway ─ 1. LLM reads: extract each rate/fee claim as JSON   (Groq)
@@ -65,16 +65,16 @@ call, log or API response (`gateway/pii.py`). Customer names are never sent to t
 
 ```
 data2intelligence/
-├── bot/
-│   ├── bot.py               # LLM chatbot (Groq) — every answer generated live
-│   ├── api.py               # FastAPI: /chat, /verify, /customers, /sample-questions, /health
-│   └── run_bot.py           # ask the LLM all sample questions -> bot/output/responses.json
+├── api/
+│   └── main.py              # FastAPI: /chat, /verify, /customers, /sample-questions, /health
+├── chatbot/
+│   └── assistant.py         # LLM chatbot (Groq)
 ├── gateway/
 │   ├── extract_and_match.py # LLM step: claims -> JSON
 │   ├── verify.py            # rule step: no LLM
 │   ├── trust_signals.py     # provenance, reliability, freshness, agreement
 │   ├── pii.py               # PII masking
-│   ├── gateway.py           # orchestrator; --batch verifies bot/output/responses.json
+│   ├── gateway.py           # orchestrator; --batch verifies chatbot/output/responses.json
 │   ├── demo.py              # terminal demo: ask the LLM, then verify
 │   └── legacy_regex/        # first hackathon version (regex), not used
 ├── golden_dataset/          # the bank's source of truth (system of record)
@@ -83,18 +83,17 @@ data2intelligence/
 │   └── sample_questions.csv # example questions for the UI — questions only
 ├── secondary_sources/       # lower-tier sources that can disagree (branch FAQ, marketing page)
 ├── ui/index.html            # chat UI (React, no build step)
+├── scripts/
+│   ├── generate_dataset.py      # regenerates golden_dataset/ and the test fixtures
+│   └── run_sample_questions.py  # ask the chatbot every sample question -> chatbot/output/responses.json
 ├── tests/
-│   ├── fixtures/gateway_test_cases.csv  # hand-written bad answers, used ONLY to test the rules offline
+│   ├── fixtures/gateway_test_cases.csv  # known-bad answers for the offline rule tests
 │   ├── test_gateway_offline.py
-│   └── test_bot_llm.py
-├── fake_data/generate_data.py           # regenerates the fictional dataset
+│   └── test_chatbot.py
+├── docs/gateway_design.md               # how the gateway is built and why
 ├── aws/handler.py  template.yaml        # AWS Lambda deploy (see AWS_DEPLOY.md)
 └── requirements.txt  requirements-dev.txt  .env.example
 ```
-
-There are no scripted chatbot answers anywhere in the app. The only hand-written
-answers are the test fixtures, which feed the gateway known-bad replies so the
-rules can be tested offline without an API key.
 
 ---
 
@@ -110,7 +109,7 @@ python -m pip install -r requirements.txt -r requirements-dev.txt
 cp .env.example .env                   # then paste your GROQ_API_KEY
 python -m pytest -q                    # offline tests, no key needed
 
-uvicorn bot.api:app --reload           # API on http://localhost:8000
+uvicorn api.main:app --reload          # API on http://localhost:8000
 open ui/index.html                     # chat UI (in a second terminal)
 ```
 
@@ -121,8 +120,8 @@ trust signals and lineage.
 ### Terminal tools
 ```bash
 python gateway/demo.py --customer CUST003 "What APR would I get on a Personal Loan?"
-python bot/run_bot.py --delay 4        # ask the LLM all sample questions
-python gateway/gateway.py --batch      # verify those live answers
+python scripts/run_sample_questions.py --delay 4   # ask the chatbot every sample question
+python gateway/gateway.py --batch                  # verify those answers
 ```
 The Groq free plan is rate-limited; keep a few seconds between calls. If a call
 fails, the gateway returns FALLBACK — it never passes an unverified answer.

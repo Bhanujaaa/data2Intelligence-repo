@@ -60,7 +60,7 @@ def run(case_id, claims=None):
         return gateway.run_gateway(entry)
 
 
-def test_every_scripted_case_gets_its_expected_action():
+def test_every_fixture_case_gets_its_expected_action():
     for cid in CLAIMS:
         r = run(cid)
         assert r["action"] == CASES[cid]["expected_gateway_action"], (cid, r["action"], r["verdicts"])

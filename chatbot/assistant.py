@@ -1,12 +1,12 @@
 """
 FirstVault chatbot — every answer comes from a live LLM (Groq).
 ===============================================================
-There are no scripted answers. The bot is deliberately an ordinary chatbot:
-it knows the product names and the customer's own accounts, but it does NOT
-have the current rate sheet. When it quotes a rate or fee it may be right,
-stale or invented — which is exactly what the gateway is there to catch.
+The assistant is an ordinary customer-service chatbot: it knows the product
+names and the signed-in customer's own accounts, but not the current rate
+sheet. When it quotes a rate or fee it may be right, stale or invented, which
+is what the gateway is there to catch.
 
-The gateway is bot-agnostic: it only ever sees the bot's text.
+The gateway is model-agnostic: it only ever sees the answer text.
 """
 
 import csv
@@ -56,11 +56,11 @@ FirstVault products:
 {profile}"""
 
 
-def get_bot_response(customer_id: str, customer_question: str) -> dict:
-    """Ask the live LLM. Returns {"bot_response": str, "model": str}.
+def generate_answer(customer_id: str, customer_question: str) -> dict:
+    """Ask the LLM. Returns {"bot_response": str, "model": str}.
 
-    Raises EnvironmentError / ImportError / provider errors — the API turns
-    those into HTTP errors; nothing falls back to a script.
+    Raises EnvironmentError / ImportError / provider errors; the API turns
+    those into HTTP errors.
     """
     try:
         from groq import Groq
@@ -85,7 +85,3 @@ def get_bot_response(customer_id: str, customer_question: str) -> dict:
         raise RuntimeError("The LLM returned an empty answer.")
     return {"bot_response": text, "model": model_id}
 
-
-# Backwards-compatible name used by older callers.
-def get_live_bot_response(customer_question: str, customer_id: str = "") -> str:
-    return get_bot_response(customer_id, customer_question)["bot_response"]

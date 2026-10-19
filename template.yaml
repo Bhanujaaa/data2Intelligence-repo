@@ -42,7 +42,7 @@ Resources:
           GROQ_MODEL: !Ref GroqModel
           AUDIT_TABLE: !Ref AuditTable
           GATEWAY_WRITE_DIR: /tmp/gateway
-          BOT_WRITE_DIR: /tmp/bot
+          CHATBOT_WRITE_DIR: /tmp/chatbot
       Policies:
         - DynamoDBWritePolicy:
             TableName: !Ref AuditTable

@@ -1,22 +1,34 @@
 """
-Generate fake bank dataset for rate-gateway demo.
-Outputs 5 CSV files to fake_data/output/:
-  products.csv, pricing_rules.csv, customers.csv, accounts.csv, test_cases.csv
+Generate the FirstVault dataset used by the gateway and its tests.
+Writes:
+  golden_dataset/        products.csv, pricing_rules.csv, customers.csv, accounts.csv
+  tests/fixtures/        gateway_test_cases.csv (known-bad answers for the offline tests)
+
+Usage:
+    python scripts/generate_dataset.py
+    python scripts/generate_dataset.py --out-dir /tmp/dataset   # write everything to one folder
 """
 
+import argparse
 import csv
 import os
 from datetime import date, timedelta
 
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "output")
-os.makedirs(OUTPUT_DIR, exist_ok=True
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_args = argparse.ArgumentParser(description="Generate the FirstVault dataset")
+_args.add_argument("--out-dir", help="Write all files to this folder instead")
+_OUT = _args.parse_args().out_dir
+GOLDEN_DIR   = _OUT or os.path.join(_PROJECT_ROOT, "golden_dataset")
+FIXTURES_DIR = _OUT or os.path.join(_PROJECT_ROOT, "tests", "fixtures")
 
 TODAY = date(2026, 8, 21)
 STALE_DATE = TODAY - timedelta(days=32)
 
 
-def write_csv(filename, fieldnames, rows):
-    path = os.path.join(OUTPUT_DIR, filename)
+def write_csv(filename, fieldnames, rows, directory=None):
+    directory = directory or GOLDEN_DIR
+    os.makedirs(directory, exist_ok=True)
+    path = os.path.join(directory, filename)
     with open(path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
@@ -414,9 +426,8 @@ TEST_CASES = [
 ]
 
 write_csv(
-    "test_cases.csv",
+    "gateway_test_cases.csv",
     ["id", "customer_id", "customer_question", "bot_response", "expected_gateway_action", "scenario_type"],
     TEST_CASES,
+    directory=FIXTURES_DIR,
 )
-
-print(f"\nAll files written to: {OUTPUT_DIR}")
